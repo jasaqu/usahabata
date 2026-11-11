@@ -75,6 +75,8 @@ button{min-height:44px}button.s{min-height:36px}
 body.lock main,body.lock nav{display:none}body:not(.lock) #auth{display:none}#auth{max-width:420px;margin:0 auto;padding:56px 16px}#bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;font-size:.8rem;color:var(--mu)}#bar span{overflow-wrap:anywhere}#bar button{min-height:32px;flex:none}
 .ord{display:flex;align-items:center;gap:6px;padding:10px 12px}.ord .oi{flex:1;min-width:0}.ord .oi small{display:block;color:var(--mu);font-size:.8rem;margin-top:2px;overflow-wrap:anywhere}.ord .ou{flex:none;font-size:.88rem;padding:3px 8px}.ord .ic{flex:none;min-width:32px;min-height:34px;padding:0;border-color:transparent}#b-tb{gap:8px}
 #b-pg{justify-content:space-between;align-items:center;margin:0 0 14px}#b-pg button{flex:none;min-height:40px}#b-pi{font-size:.85rem;color:var(--mu);text-align:center}
+#o-list{--r:58px;max-height:calc(var(--r)*5.5);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-right:2px}#o-list .item{padding:6px 0;min-height:var(--r)}#o-list .item small{font-size:.8rem}
+main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-padding-bottom:130px}
 [hidden]{display:none!important}
 </style></head><body class="lock">
 <div id="auth"><h1 style="font-size:1.5rem;margin:0 0 4px">Usaha Bata</h1><p class="sub">Masuk untuk membuka pembukuan dan ongkos.</p>
@@ -250,7 +252,7 @@ ie("orders");ie("areas");
 document.querySelectorAll("input[type=number]").forEach(i=>i.placeholder||(i.placeholder="0"));hit();ol();bl();bp();kb();$("b-t").value=new Date().toISOString().slice(0,10);
 const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku"].includes(h0))go(h0);
 
-const SB_URL="https://yfojeaufxhnvmkghaenh.supabase.co",SB_KEY="sb_publishable_ITVMg-RrpLehOoDPVeSRQw_jaKrMtQa";
+const SB_URL="ISI_URL_PROYEK_SUPABASE",SB_KEY="ISI_ANON_PUBLIC_KEY";
 const sb=(window.supabase&&SB_URL.startsWith("https"))?window.supabase.createClient(SB_URL,SB_KEY):null;
 let uid=null;
 async function push(){if(!sb||!uid)return;$("sync").textContent="Menyimpan…";
