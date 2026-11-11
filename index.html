@@ -182,6 +182,7 @@ editI>=0?areas[editI]=a:areas.push(a);sv("ub_areas",areas);ol();$("o-b").onclick
 // pembukuan
 function bp(){const r=calc(N("b-q"),N("b-j"),N("b-b"),N("b-o"),N("b-k"));$("b-pv").textContent=rp(r.u);$("b-pv").className=r.u>0?"pos":r.u<0?"neg":""}
 ["b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).oninput=bp);
+const PER=5;
 let editB=-1,pg=0;
 function bx(){editB=-1;["b-n","b-a","b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).value="");$("b-ft").textContent="Pesanan baru";$("b-s").textContent="Simpan pesanan";$("b-x").hidden=true;bp()}
 $("b-x").onclick=()=>{bx();$("b-msg").textContent=""};
@@ -189,8 +190,8 @@ function be(i){const o=orders[i];editB=i;$("b-t").value=o.t;$("b-n").value=o.n;$
 function rr(o){const r=calc(o.q,o.j,o.b,o.o,o.k);return{tot:r.tj,pay:r.biaya,u:r.u}}
 function bl(){let q=0,t=0,p=0,u=0;orders.forEach(o=>{const r=rr(o);q+=o.q;t+=r.tot;p+=r.pay;u+=r.u});
 $("b-sum").innerHTML='<table class="sum"><caption>Ringkasan pesanan</caption>'+[["Jumlah pesanan",orders.length],["Total bata (biji)",q.toLocaleString("id-ID")],["Total pembayaran",rp(t)],["Bayar ke produsen dan biaya operasional",rp(p)],["Total keuntungan",rp(u)]].map((x,i,a)=>`<tr${i===a.length-1?' class="tot"':''}><th${i===a.length-1?' class="yl"':''}>${x[0]}</th><td${i===a.length-1?` class="yl ${u>=0?'pos':'neg'}"`:''}>${x[1]}</td></tr>`).join("")+'</table>';
-const pages=Math.max(1,Math.ceil(orders.length/10));if(pg>=pages)pg=pages-1;
-$("b-tb").innerHTML=orders.map((o,i)=>[o,i]).slice(Math.max(0,orders.length-10*(pg+1)),orders.length-10*pg).map(([o,i])=>{const r=rr(o);return`<div class="ord"><div class="oi"><strong>${esc(o.n)}</strong><small>${esc(o.t)} · ${o.q.toLocaleString("id-ID")} biji${o.a?" · "+esc(o.a):""}</small></div><div class="ou yl ${r.u>=0?"pos":"neg"}">${rp(r.u)}</div><button class="g s ic" data-ed="${i}" aria-label="Ubah" title="Ubah">✏️</button><button class="g s ic" data-x="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div>`}).join("");
+const pages=Math.max(1,Math.ceil(orders.length/PER));if(pg>=pages)pg=pages-1;
+$("b-tb").innerHTML=orders.map((o,i)=>[o,i]).slice(Math.max(0,orders.length-PER*(pg+1)),orders.length-PER*pg).map(([o,i])=>{const r=rr(o);return`<div class="ord"><div class="oi"><strong>${esc(o.n)}</strong><small>${esc(o.t)} · ${o.q.toLocaleString("id-ID")} biji${o.a?" · "+esc(o.a):""}</small></div><div class="ou yl ${r.u>=0?"pos":"neg"}">${rp(r.u)}</div><button class="g s ic" data-ed="${i}" aria-label="Ubah" title="Ubah">✏️</button><button class="g s ic" data-x="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div>`}).join("");
 $("b-e").textContent=orders.length?"":"Belum ada pesanan tercatat.";$("b-pg").hidden=pages<2;$("b-pi").textContent="Halaman "+(pg+1)+" dari "+pages;$("b-prev").disabled=pg<=0;$("b-next").disabled=pg>=pages-1}
 $("b-prev").onclick=()=>{if(pg>0){pg--;bl();$("b-tb").scrollIntoView({block:"start"})}};$("b-next").onclick=()=>{pg++;bl();$("b-tb").scrollIntoView({block:"start"})};
 $("b-tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.ed!==undefined)be(+b.dataset.ed);else if(b.dataset.x!==undefined&&confirm("Hapus pesanan ini?")){orders.splice(+b.dataset.x,1);sv("ub_orders",orders);if(editB>=0)bx();bl()}};
@@ -249,7 +250,7 @@ ie("orders");ie("areas");
 document.querySelectorAll("input[type=number]").forEach(i=>i.placeholder||(i.placeholder="0"));hit();ol();bl();bp();kb();$("b-t").value=new Date().toISOString().slice(0,10);
 const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku"].includes(h0))go(h0);
 
-const SB_URL="https://yfojeaufxhnvmkghaenh.supabase.co",SB_KEY="sb_publishable_ITVMg-RrpLehOoDPVeSRQw_jaKrMtQa";
+const SB_URL="ISI_URL_PROYEK_SUPABASE",SB_KEY="ISI_ANON_PUBLIC_KEY";
 const sb=(window.supabase&&SB_URL.startsWith("https"))?window.supabase.createClient(SB_URL,SB_KEY):null;
 let uid=null;
 async function push(){if(!sb||!uid)return;$("sync").textContent="Menyimpan…";
