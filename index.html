@@ -74,6 +74,7 @@ button{min-height:44px}button.s{min-height:36px}
 .ic{min-width:44px;padding:6px 10px;font-size:1.05rem;line-height:1}.ord .acts{justify-content:flex-end}.ord .acts .ic{flex:0 0 auto}
 body.lock main,body.lock nav{display:none}body:not(.lock) #auth{display:none}#auth{max-width:420px;margin:0 auto;padding:56px 16px}#bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;font-size:.8rem;color:var(--mu)}#bar span{overflow-wrap:anywhere}#bar button{min-height:32px;flex:none}
 .ord{display:flex;align-items:center;gap:6px;padding:10px 12px}.ord .oi{flex:1;min-width:0}.ord .oi small{display:block;color:var(--mu);font-size:.8rem;margin-top:2px;overflow-wrap:anywhere}.ord .ou{flex:none;font-size:.88rem;padding:3px 8px}.ord .ic{flex:none;min-width:32px;min-height:34px;padding:0;border-color:transparent}#b-tb{gap:8px}
+#b-pg{justify-content:space-between;align-items:center;margin:0 0 14px}#b-pg button{flex:none;min-height:40px}#b-pi{font-size:.85rem;color:var(--mu);text-align:center}
 [hidden]{display:none!important}
 </style></head><body class="lock">
 <div id="auth"><h1 style="font-size:1.5rem;margin:0 0 4px">Usaha Bata</h1><p class="sub">Masuk untuk membuka pembukuan dan ongkos.</p>
@@ -131,6 +132,7 @@ body.lock main,body.lock nav{display:none}body:not(.lock) #auth{display:none}#au
 <div class="acts"><button id="b-s">Simpan pesanan</button><button class="g" id="b-x" hidden>Batal</button></div>
 <div class="msg" id="b-msg"></div></div>
 <div id="b-tb"></div><div class="msg" id="b-e"></div>
+<div class="acts" id="b-pg" hidden><button class="g" id="b-prev" type="button">Sebelumnya</button><span id="b-pi"></span><button class="g" id="b-next" type="button">Berikutnya</button></div>
 <div class="acts" style="margin-top:0"><button id="b-d">⬇ Unduh CSV</button><button class="g" id="b-i">⬆ Impor data</button></div><div class="msg" id="b-dm"></div>
 <div id="ie-orders"></div>
 </section>
@@ -180,19 +182,21 @@ editI>=0?areas[editI]=a:areas.push(a);sv("ub_areas",areas);ol();$("o-b").onclick
 // pembukuan
 function bp(){const r=calc(N("b-q"),N("b-j"),N("b-b"),N("b-o"),N("b-k"));$("b-pv").textContent=rp(r.u);$("b-pv").className=r.u>0?"pos":r.u<0?"neg":""}
 ["b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).oninput=bp);
-let editB=-1;
+let editB=-1,pg=0;
 function bx(){editB=-1;["b-n","b-a","b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).value="");$("b-ft").textContent="Pesanan baru";$("b-s").textContent="Simpan pesanan";$("b-x").hidden=true;bp()}
 $("b-x").onclick=()=>{bx();$("b-msg").textContent=""};
 function be(i){const o=orders[i];editB=i;$("b-t").value=o.t;$("b-n").value=o.n;$("b-a").value=o.a;$("b-q").value=o.q;$("b-j").value=o.j;$("b-b").value=o.b;$("b-o").value=o.o;$("b-k").value=o.k;$("b-ft").textContent="Ubah pesanan";$("b-s").textContent="Simpan perubahan";$("b-x").hidden=false;bp();$("b-n").scrollIntoView({behavior:"smooth",block:"center"})}
 function rr(o){const r=calc(o.q,o.j,o.b,o.o,o.k);return{tot:r.tj,pay:r.biaya,u:r.u}}
 function bl(){let q=0,t=0,p=0,u=0;orders.forEach(o=>{const r=rr(o);q+=o.q;t+=r.tot;p+=r.pay;u+=r.u});
 $("b-sum").innerHTML='<table class="sum"><caption>Ringkasan pesanan</caption>'+[["Jumlah pesanan",orders.length],["Total bata (biji)",q.toLocaleString("id-ID")],["Total pembayaran",rp(t)],["Bayar ke produsen dan biaya operasional",rp(p)],["Total keuntungan",rp(u)]].map((x,i,a)=>`<tr${i===a.length-1?' class="tot"':''}><th${i===a.length-1?' class="yl"':''}>${x[0]}</th><td${i===a.length-1?` class="yl ${u>=0?'pos':'neg'}"`:''}>${x[1]}</td></tr>`).join("")+'</table>';
-$("b-tb").innerHTML=orders.map((o,i)=>{const r=rr(o);return`<div class="ord"><div class="oi"><strong>${esc(o.n)}</strong><small>${esc(o.t)} · ${o.q.toLocaleString("id-ID")} biji${o.a?" · "+esc(o.a):""}</small></div><div class="ou yl ${r.u>=0?"pos":"neg"}">${rp(r.u)}</div><button class="g s ic" data-ed="${i}" aria-label="Ubah" title="Ubah">✏️</button><button class="g s ic" data-x="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div>`}).join("");
-$("b-e").textContent=orders.length?"":"Belum ada pesanan tercatat."}
+const pages=Math.max(1,Math.ceil(orders.length/10));if(pg>=pages)pg=pages-1;
+$("b-tb").innerHTML=orders.map((o,i)=>[o,i]).slice(Math.max(0,orders.length-10*(pg+1)),orders.length-10*pg).map(([o,i])=>{const r=rr(o);return`<div class="ord"><div class="oi"><strong>${esc(o.n)}</strong><small>${esc(o.t)} · ${o.q.toLocaleString("id-ID")} biji${o.a?" · "+esc(o.a):""}</small></div><div class="ou yl ${r.u>=0?"pos":"neg"}">${rp(r.u)}</div><button class="g s ic" data-ed="${i}" aria-label="Ubah" title="Ubah">✏️</button><button class="g s ic" data-x="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div>`}).join("");
+$("b-e").textContent=orders.length?"":"Belum ada pesanan tercatat.";$("b-pg").hidden=pages<2;$("b-pi").textContent="Halaman "+(pg+1)+" dari "+pages;$("b-prev").disabled=pg<=0;$("b-next").disabled=pg>=pages-1}
+$("b-prev").onclick=()=>{if(pg>0){pg--;bl();$("b-tb").scrollIntoView({block:"start"})}};$("b-next").onclick=()=>{pg++;bl();$("b-tb").scrollIntoView({block:"start"})};
 $("b-tb").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.ed!==undefined)be(+b.dataset.ed);else if(b.dataset.x!==undefined&&confirm("Hapus pesanan ini?")){orders.splice(+b.dataset.x,1);sv("ub_orders",orders);if(editB>=0)bx();bl()}};
 $("b-s").onclick=()=>{if(!N("b-q")||!$("b-n").value.trim()){$("b-msg").textContent="Isi nama pembeli dan jumlah pesanan.";return}
 const ob={t:$("b-t").value||new Date().toISOString().slice(0,10),n:$("b-n").value.trim(),a:$("b-a").value.trim(),q:N("b-q"),j:N("b-j"),b:N("b-b"),o:N("b-o"),k:N("b-k")};
-editB>=0?orders[editB]=ob:orders.push(ob);sv("ub_orders",orders);bx();bl();$("b-msg").textContent="Pesanan tersimpan."};
+editB>=0?orders[editB]=ob:orders.push(ob);sv("ub_orders",orders);bx();pg=0;bl();$("b-msg").textContent="Pesanan tersimpan."};
 $("b-d").onclick=async()=>{const h="Tanggal,Nama pembeli,Alamat,Jumlah,Harga jual,Harga beli,Total pembayaran,Ongkos kirim,Ongkos kuli,Bayar ke produsen dan biaya operasional,Keuntungan";
 const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
 const csv=[h].concat(orders.map(o=>{const r=rr(o);return[q(o.t),q(o.n),q(o.a),o.q,o.j,o.b,r.tot,o.o,o.k,r.pay,r.u].join(",")})).join("\n");
@@ -245,7 +249,7 @@ ie("orders");ie("areas");
 document.querySelectorAll("input[type=number]").forEach(i=>i.placeholder||(i.placeholder="0"));hit();ol();bl();bp();kb();$("b-t").value=new Date().toISOString().slice(0,10);
 const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku"].includes(h0))go(h0);
 
-const SB_URL="https://yfojeaufxhnvmkghaenh.supabase.co",SB_KEY="sb_publishable_ITVMg-RrpLehOoDPVeSRQw_jaKrMtQa";
+const SB_URL="ISI_URL_PROYEK_SUPABASE",SB_KEY="ISI_ANON_PUBLIC_KEY";
 const sb=(window.supabase&&SB_URL.startsWith("https"))?window.supabase.createClient(SB_URL,SB_KEY):null;
 let uid=null;
 async function push(){if(!sb||!uid)return;$("sync").textContent="Menyimpan…";
