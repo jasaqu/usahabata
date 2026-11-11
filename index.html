@@ -244,7 +244,7 @@ ie("orders");ie("areas");
 document.querySelectorAll("input[type=number]").forEach(i=>i.placeholder||(i.placeholder="0"));hit();ol();bl();bp();kb();$("b-t").value=new Date().toISOString().slice(0,10);
 const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku"].includes(h0))go(h0);
 
-const SB_URL="ISI_URL_PROYEK_SUPABASE",SB_KEY="ISI_ANON_PUBLIC_KEY";
+const SB_URL="https://yfojeaufxhnvmkghaenh.supabase.co",SB_KEY="sb_publishable_ITVMg-RrpLehOoDPVeSRQw_jaKrMtQa";
 const sb=(window.supabase&&SB_URL.startsWith("https"))?window.supabase.createClient(SB_URL,SB_KEY):null;
 let uid=null;
 async function push(){if(!sb||!uid)return;$("sync").textContent="Menyimpan…";
