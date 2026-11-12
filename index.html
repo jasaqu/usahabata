@@ -143,7 +143,7 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 </section>
 <section id="p-nota" hidden>
 <h1>Nota jual beli</h1><p class="sub">Buat nota, kirim ke WhatsApp atau cetak ke printer Bluetooth 58 mm.</p>
-<div class="card"><div class="row"><div><label>Nama pembeli</label><input id="nt-n"></div><div><label>Tanggal</label><input id="nt-t" type="date"></div></div></div>
+<div class="card"><div class="row"><div><label>Nama pemasok</label><input id="nt-n"></div><div><label>Tanggal</label><input id="nt-t" type="date"></div></div></div>
 <div class="card"><strong>Orderan</strong><div id="nt-i"></div><button class="g" id="nt-ai" style="width:100%;margin-top:10px">+ Tambah item</button></div>
 <div class="card"><strong>Biaya lain</strong><div class="row" style="margin-top:8px"><div><label>Ongkos mobil (Rp)</label><input id="nt-m" type="number" inputmode="numeric" min="0"></div><div><label>Kuli bongkar (Rp)</label><input id="nt-k" type="number" inputmode="numeric" min="0"></div></div><div class="kv" style="margin-top:10px"><span>Total bayar</span><strong id="nt-tb">Rp 0</strong></div></div>
 <div class="card"><strong>Talangan</strong><div id="nt-l"></div><button class="g" id="nt-al" style="width:100%;margin-top:10px">+ Tambah talangan</button><div class="kv" style="margin-top:10px"><span>Total talangan</span><strong id="nt-tt">Rp 0</strong></div></div>
@@ -331,7 +331,7 @@ const row=(l,r,s,b,col)=>{if(go){F(s,b);c.fillStyle=col||"#2b2118";c.textAlign="
 const ln=()=>{if(go){c.fillStyle="#d9cdbf";c.fillRect(P,y,Wd-2*P,1)}y+=18};
 const hd=t=>{if(go){F(19,1);c.fillStyle="#b5481f";c.textAlign="left";c.fillText(t,P,y)}y+=30};
 mid("NOTA BATA BOLONG",24,"#b5481f",1);mid(S.tgl,14,"#7a6a5c");
-if(S.nama)mid("Pembeli: "+S.nama,15,"#2b2118",1);
+if(S.nama)mid("Pemasok: "+S.nama,15,"#2b2118",1);
 y+=2;ln();hd("ORDERAN");
 S.i.forEach(x=>{row(x.k||"Barang","",16,1);y-=4;row("   "+n(x.q).toLocaleString("id-ID")+" × "+R(n(x.h)),R(n(x.q)*n(x.h)),15,0,"#5a4a3c");y+=2});
 ln();row("Ongkos mobil",R(n(S.m)),16);row("Kuli bongkar",R(n(S.u)),16);y-=4;ln();row("Total Bayar",R(T.tb),18,1);
@@ -356,7 +356,7 @@ function bangun(){calc();const L=[],g="-".repeat(W),e="=".repeat(W);
 const add=s=>{s=A(s);L.push((s+" ".repeat(W)).slice(0,W))};
 const mid=s=>wrapT(s,W).forEach(x=>add(" ".repeat(Math.floor((W-x.length)/2))+x));
 const row=(l,r)=>{l=A(l);r=A(r);if(l.length+r.length+1<=W)add(l+" ".repeat(W-l.length-r.length)+r);else{wrapT(l,W).forEach(add);add(" ".repeat(Math.max(0,W-r.length))+r)}};
-mid("NOTA BATA BOLONG");mid(S.tgl);if(S.nama)mid("Pembeli: "+S.nama);
+mid("NOTA BATA BOLONG");mid(S.tgl);if(S.nama)mid("Pemasok: "+S.nama);
 add(g);add("ORDERAN");add(g);
 S.i.forEach(x=>{wrapT(x.k||"Barang",W).forEach(add);row("  "+n(x.q).toLocaleString("id-ID")+" x "+RA(n(x.h)),RA(n(x.q)*n(x.h)))});
 add(g);row("Ongkos mobil",RA(n(S.m)));row("Kuli bongkar",RA(n(S.u)));add(g);row("TOTAL BAYAR",RA(T.tb));
