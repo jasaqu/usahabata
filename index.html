@@ -78,6 +78,9 @@ body.lock main,body.lock nav{display:none}body:not(.lock) #auth{display:none}#au
 #o-list{--r:58px;max-height:calc(var(--r)*5.5);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-right:2px}#o-list .item{padding:6px 0;min-height:var(--r)}#o-list .item small{font-size:.8rem}
 main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-padding-bottom:130px}
 [hidden]{display:none!important}
+#p-nota .card>strong{font-size:1.05rem}#p-nota .acts{margin-top:10px}#p-nota .kv strong{font-variant-numeric:tabular-nums}
+#nt-o{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.7);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px)}
+#nt-o .bx{max-width:560px;margin:0 auto}#nt-o img{width:100%;display:block;border-radius:10px;background:#fff}
 </style></head><body class="lock">
 <div id="auth"><h1 style="font-size:1.5rem;margin:0 0 4px">Usaha Bata</h1><p class="sub">Masuk untuk membuka pembukuan dan ongkos.</p>
 <div class="card"><label style="margin-top:0">Email</label><input id="a-e" type="email" autocomplete="username" inputmode="email"><label>Kata sandi</label><input id="a-p" type="password" autocomplete="current-password">
@@ -138,8 +141,21 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <div class="acts" style="margin-top:0"><button id="b-d">⬇ Unduh CSV</button><button class="g" id="b-i">⬆ Impor data</button></div><div class="msg" id="b-dm"></div>
 <div id="ie-orders"></div>
 </section>
+<section id="p-nota" hidden>
+<h1>Nota jual beli</h1><p class="sub">Buat nota, kirim ke WhatsApp atau cetak ke printer Bluetooth 58 mm.</p>
+<div class="card"><div class="row"><div><label>Nama pembeli</label><input id="nt-n"></div><div><label>Tanggal</label><input id="nt-t" type="date"></div></div></div>
+<div class="card"><strong>Orderan</strong><div id="nt-i"></div><button class="g" id="nt-ai" style="width:100%;margin-top:10px">+ Tambah item</button></div>
+<div class="card"><strong>Biaya lain</strong><div class="row" style="margin-top:8px"><div><label>Ongkos mobil (Rp)</label><input id="nt-m" type="number" inputmode="numeric" min="0"></div><div><label>Kuli bongkar (Rp)</label><input id="nt-k" type="number" inputmode="numeric" min="0"></div></div><div class="kv" style="margin-top:10px"><span>Total bayar</span><strong id="nt-tb">Rp 0</strong></div></div>
+<div class="card"><strong>Talangan</strong><div id="nt-l"></div><button class="g" id="nt-al" style="width:100%;margin-top:10px">+ Tambah talangan</button><div class="kv" style="margin-top:10px"><span>Total talangan</span><strong id="nt-tt">Rp 0</strong></div></div>
+<div class="card"><div class="sub" style="margin:0">Total yang harus dibayar</div><div class="big" id="nt-r">Rp 0</div></div>
+<div class="acts"><button class="g" id="nt-pv">👁 Preview nota</button></div>
+<div class="acts"><button id="nt-wa" style="background:#1fa855">Share WhatsApp (JPG)</button><button id="nt-bt" style="background:#1d5fd1">Cetak Bluetooth</button></div>
+<div class="msg" id="nt-ms"></div>
+<button class="g" id="nt-rs" style="width:100%;margin-top:6px">Nota baru</button>
+<div id="nt-o" hidden><div class="bx"><img id="nt-im" alt="Preview nota"><div class="acts"><button id="nt-w2" style="background:#1fa855">Share WhatsApp</button><button class="g" id="nt-x" style="background:var(--sf)">Tutup</button></div><div class="msg" id="nt-pm" style="color:#fff"></div></div></div>
+</section>
 </main>
-<nav role="tablist"><button role="tab" data-p="hitung" aria-selected="true"><span>💰</span>Harga</button><button role="tab" data-p="ongkos" aria-selected="false"><span>🚚</span>Ongkos</button><button role="tab" data-p="buku" aria-selected="false"><span>📒</span>Pembukuan</button><button role="tab" data-p="kebutuhan" aria-selected="false"><span>📐</span>Kalkulator</button></nav>
+<nav role="tablist"><button role="tab" data-p="hitung" aria-selected="true"><span>💰</span>Harga</button><button role="tab" data-p="ongkos" aria-selected="false"><span>🚚</span>Ongkos</button><button role="tab" data-p="buku" aria-selected="false"><span>📒</span>Pembukuan</button><button role="tab" data-p="kebutuhan" aria-selected="false"><span>📐</span>Kalkulator</button><button role="tab" data-p="nota" aria-selected="false"><span>🧾</span>Nota</button></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 const $=id=>document.getElementById(id),N=id=>Number($(id).value)||0;
@@ -151,7 +167,7 @@ let areas=ld("ub_areas",[{n:"Batanghari nuban",k:"Lampung timur",c:1000000},{n:"
 let orders=ld("ub_orders",[]),editI=-1;
 
 // navigasi
-function go(p){["kebutuhan","hitung","ongkos","buku"].forEach(x=>$("p-"+x).hidden=x!==p);
+function go(p){["kebutuhan","hitung","ongkos","buku","nota"].forEach(x=>$("p-"+x).hidden=x!==p);
 document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===p));
 window.scrollTo(0,0);try{location.hash=p}catch(e){}}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.p));
@@ -250,7 +266,7 @@ sv(O?"ub_orders":"ub_areas",cur);O?bl():ol();ta.value="";f.value="";
 m.textContent=add+(O?" pesanan":" daerah")+" ditambahkan"+(list.length>add?", "+(list.length-add)+" sudah ada dan dilewati.":".")}}
 ie("orders");ie("areas");
 document.querySelectorAll("input[type=number]").forEach(i=>i.placeholder||(i.placeholder="0"));hit();ol();bl();bp();kb();$("b-t").value=new Date().toISOString().slice(0,10);
-const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku"].includes(h0))go(h0);
+const h0=(location.hash||"").slice(1);if(["kebutuhan","ongkos","buku","nota"].includes(h0))go(h0);
 
 const SB_URL="https://yfojeaufxhnvmkghaenh.supabase.co",SB_KEY="sb_publishable_ITVMg-RrpLehOoDPVeSRQw_jaKrMtQa";
 const sb=(window.supabase&&SB_URL.startsWith("https"))?window.supabase.createClient(SB_URL,SB_KEY):null;
@@ -273,4 +289,99 @@ $("a-p").value="";$("a-m").textContent="";await enter(data.user)}
 $("a-b").onclick=login;$("a-p").onkeydown=e=>{if(e.key==="Enter")login()};
 $("out").onclick=async()=>{if(sb)await sb.auth.signOut();location.reload()};
 if(sb)sb.auth.getSession().then(({data})=>{if(data.session)enter(data.session.user)});
-</script></body></html>
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id),KEY="ub_nota",W=32;
+const n=v=>parseFloat(v)||0,R=v=>"Rp "+Math.round(v).toLocaleString("id-ID");
+const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const A=s=>String(s).replace(/×/g,"x").replace(/[^\x20-\x7E]/g,"");
+const today=()=>new Date().toISOString().slice(0,10);
+const blank=()=>({nama:"",tgl:today(),i:[{k:"Bata bolong",q:"",h:""}],m:"",u:"",l:[]});
+let S=blank(),T={tb:0,tt:0,sisa:0},BC=null,BD=null;
+try{const d=localStorage.getItem(KEY);if(d)S=Object.assign(blank(),JSON.parse(d))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const msg=t=>$("nt-ms").textContent=t;
+function calc(){let s=0;
+S.i.forEach((x,i)=>{const v=n(x.q)*n(x.h);s+=v;const e=$("nt-s"+i);if(e)e.textContent=n(x.q).toLocaleString("id-ID")+" × "+R(n(x.h))+" = "+R(v)});
+T.tb=s+n(S.m)+n(S.u);T.tt=S.l.reduce((a,x)=>a+n(x.v),0);T.sisa=T.tb-T.tt;
+$("nt-tb").textContent=R(T.tb);$("nt-tt").textContent=R(T.tt);$("nt-r").textContent=R(T.sisa);save()}
+function draw(){
+$("nt-n").value=S.nama;$("nt-t").value=S.tgl;$("nt-m").value=S.m;$("nt-k").value=S.u;
+$("nt-i").innerHTML=S.i.map((x,i)=>`<div class="card" style="margin:10px 0 0;padding:12px"><label style="margin-top:0">Barang</label><input data-i="${i}" data-f="k" value="${E(x.k)}"><div class="row" style="margin-top:8px"><div><label>Jumlah</label><input type="number" inputmode="numeric" min="0" data-i="${i}" data-f="q" value="${E(x.q)}"></div><div><label>Harga beli (Rp)</label><input type="number" inputmode="numeric" min="0" data-i="${i}" data-f="h" value="${E(x.h)}"></div></div><div class="kv"><span id="nt-s${i}"></span><button class="g s" data-di="${i}">Hapus</button></div></div>`).join("");
+$("nt-l").innerHTML=S.l.map((x,i)=>`<div style="display:grid;grid-template-columns:1.2fr 1fr auto;gap:8px;margin-top:10px;align-items:center"><input placeholder="Keterangan" data-l="${i}" data-f="k" value="${E(x.k)}"><input type="number" inputmode="numeric" min="0" placeholder="Rp 0" data-l="${i}" data-f="v" value="${E(x.v)}"><button class="g s" data-dl="${i}">✕</button></div>`).join("");
+calc()}
+$("nt-i").oninput=e=>{const t=e.target;if(t.dataset.i!==undefined){S.i[t.dataset.i][t.dataset.f]=t.value;calc()}};
+$("nt-l").oninput=e=>{const t=e.target;if(t.dataset.l!==undefined){S.l[t.dataset.l][t.dataset.f]=t.value;calc()}};
+$("nt-i").onclick=e=>{const b=e.target.closest("[data-di]");if(!b)return;S.i.splice(+b.dataset.di,1);if(!S.i.length)S.i.push({k:"",q:"",h:""});draw()};
+$("nt-l").onclick=e=>{const b=e.target.closest("[data-dl]");if(!b)return;S.l.splice(+b.dataset.dl,1);draw()};
+$("nt-ai").onclick=()=>{S.i.push({k:"Bata bolong",q:"",h:""});draw()};
+$("nt-al").onclick=()=>{S.l.push({k:"",v:""});draw()};
+$("nt-n").oninput=e=>{S.nama=e.target.value;save()};
+$("nt-t").oninput=e=>{S.tgl=e.target.value;save()};
+$("nt-m").oninput=e=>{S.m=e.target.value;calc()};
+$("nt-k").oninput=e=>{S.u=e.target.value;calc()};
+$("nt-rs").onclick=()=>{if(confirm("Hapus isi nota ini dan mulai nota baru?")){S=blank();draw();msg("")}};
+
+/* gambar JPG */
+function paint(c,go){let y=44;const Wd=540,P=28;
+const F=(s,b)=>{c.font=(b?"700 ":"400 ")+s+"px system-ui,sans-serif"};
+const mid=(t,s,col,b)=>{if(go){F(s,b);c.fillStyle=col;c.textAlign="center";c.fillText(t,Wd/2,y)}y+=s+8};
+const row=(l,r,s,b,col)=>{if(go){F(s,b);c.fillStyle=col||"#2b2118";c.textAlign="right";c.fillText(r,Wd-P,y);const w=c.measureText(r).width;c.textAlign="left";let t=l;while(t.length>1&&c.measureText(t).width>Wd-2*P-w-12)t=t.slice(0,-1);c.fillText(t,P,y)}y+=s+10};
+const ln=()=>{if(go){c.fillStyle="#d9cdbf";c.fillRect(P,y,Wd-2*P,1)}y+=18};
+const hd=t=>{if(go){F(19,1);c.fillStyle="#b5481f";c.textAlign="left";c.fillText(t,P,y)}y+=30};
+mid("NOTA BATA BOLONG",24,"#b5481f",1);mid(S.tgl,14,"#7a6a5c");
+if(S.nama)mid("Pembeli: "+S.nama,15,"#2b2118",1);
+y+=2;ln();hd("ORDERAN");
+S.i.forEach(x=>{row(x.k||"Barang","",16,1);y-=4;row("   "+n(x.q).toLocaleString("id-ID")+" × "+R(n(x.h)),R(n(x.q)*n(x.h)),15,0,"#5a4a3c");y+=2});
+ln();row("Ongkos mobil",R(n(S.m)),16);row("Kuli bongkar",R(n(S.u)),16);y-=4;ln();row("Total Bayar",R(T.tb),18,1);
+if(S.l.length){y+=4;ln();hd("TALANGAN");S.l.forEach(x=>row(x.k||"Talangan",R(n(x.v)),16));y-=4;ln();row("Total Talangan",R(T.tt),18,1)}
+y+=6;
+if(go){const w=Wd-2*P,h=88,r=14,x=P;c.fillStyle="#b5481f";c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();c.fill();
+c.textAlign="center";c.fillStyle="#ffe3d6";F(13,1);c.fillText("TOTAL YANG HARUS DIBAYAR",Wd/2,y+30);c.fillStyle="#fff";F(32,1);c.fillText(R(T.sisa),Wd/2,y+68)}
+y+=114;mid("Terima kasih",13,"#7a6a5c");return y+P-10}
+function gambar(){calc();const H=paint(document.createElement("canvas").getContext("2d"),0),cv=document.createElement("canvas");
+cv.width=1080;cv.height=Math.ceil(H*2);const c=cv.getContext("2d");c.scale(2,2);c.fillStyle="#fff";c.fillRect(0,0,540,H);paint(c,1);return cv}
+function buka(note){$("nt-im").src=gambar().toDataURL("image/jpeg",.92);$("nt-pm").textContent=note||"Tekan lama gambar untuk menyimpan sebagai JPG.";$("nt-o").hidden=false;$("nt-o").scrollTop=0}
+$("nt-pv").onclick=()=>buka();$("nt-x").onclick=()=>{$("nt-o").hidden=true};
+function wa(){const cv=gambar(),fb=()=>buka("Kirim langsung tidak tersedia di sini. Tekan lama gambar, simpan, lalu kirim lewat WhatsApp.");
+cv.toBlob(b=>{if(!b)return fb();const f=new File([b],"nota-bata-"+S.tgl+".jpg",{type:"image/jpeg"});
+if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:"Nota Bata Bolong"}).catch(e=>{if(!e||e.name!=="AbortError")fb()});else fb()},"image/jpeg",.92)}
+$("nt-wa").onclick=wa;$("nt-w2").onclick=wa;
+
+/* cetak Bluetooth 58 mm: tiap baris diisi persis 32 karakter, tanpa perintah pindah baris */
+function wrapT(s,w){s=A(s);const o=[];let cur="";s.split(" ").forEach(wd=>{while(wd.length>w){if(cur){o.push(cur);cur=""}o.push(wd.slice(0,w));wd=wd.slice(w)}if(!cur)cur=wd;else if((cur+" "+wd).length<=w)cur+=" "+wd;else{o.push(cur);cur=wd}});if(cur)o.push(cur);return o.length?o:[""]}
+const RA=v=>"Rp "+Math.round(v).toLocaleString("id-ID");
+function bangun(){calc();const L=[],g="-".repeat(W),e="=".repeat(W);
+const add=s=>{s=A(s);L.push((s+" ".repeat(W)).slice(0,W))};
+const mid=s=>wrapT(s,W).forEach(x=>add(" ".repeat(Math.floor((W-x.length)/2))+x));
+const row=(l,r)=>{l=A(l);r=A(r);if(l.length+r.length+1<=W)add(l+" ".repeat(W-l.length-r.length)+r);else{wrapT(l,W).forEach(add);add(" ".repeat(Math.max(0,W-r.length))+r)}};
+mid("NOTA BATA BOLONG");mid(S.tgl);if(S.nama)mid("Pembeli: "+S.nama);
+add(g);add("ORDERAN");add(g);
+S.i.forEach(x=>{wrapT(x.k||"Barang",W).forEach(add);row("  "+n(x.q).toLocaleString("id-ID")+" x "+RA(n(x.h)),RA(n(x.q)*n(x.h)))});
+add(g);row("Ongkos mobil",RA(n(S.m)));row("Kuli bongkar",RA(n(S.u)));add(g);row("TOTAL BAYAR",RA(T.tb));
+if(S.l.length){add(g);add("TALANGAN");add(g);S.l.forEach(x=>row(x.k||"Talangan",RA(n(x.v))));add(g);row("TOTAL TALANGAN",RA(T.tt))}
+add(e);mid("HARUS DIBAYAR");mid(RA(T.sisa));add(e);mid("Terima kasih");
+for(let k=0;k<5;k++)add("");
+const s=L.join(""),o=[0x1b,0x40];for(let i=0;i<s.length;i++)o.push(s.charCodeAt(i));return new Uint8Array(o)}
+async function cetak(){
+if(!navigator.bluetooth){msg("Browser ini tidak mendukung Bluetooth. Pakai Chrome di Android.");return}
+const b=$("nt-bt");b.disabled=true;
+try{
+if(!BC||!BD||!BD.gatt.connected){
+msg("Pilih printer Bluetooth...");
+BD=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:["000018f0-0000-1000-8000-00805f9b34fb","0000ffe0-0000-1000-8000-00805f9b34fb","0000ff00-0000-1000-8000-00805f9b34fb","e7810a71-73ae-499d-8c15-faa9aef0c3f2","49535343-fe7d-4ae5-8fa9-9fafd205e455","0000fee7-0000-1000-8000-00805f9b34fb","0000ae30-0000-1000-8000-00805f9b34fb","0000ffe5-0000-1000-8000-00805f9b34fb","0000fff0-0000-1000-8000-00805f9b34fb","0000af30-0000-1000-8000-00805f9b34fb"]});
+msg("Menyambung ke "+(BD.name||"printer")+"...");
+const sv=await BD.gatt.connect().then(s=>s.getPrimaryServices());BC=null;
+for(let i=0;i<sv.length&&!BC;i++){const cs=await sv[i].getCharacteristics();for(const c of cs){if(c.properties.write||c.properties.writeWithoutResponse){BC=c;break}}}
+if(!BC)throw new Error("Printer tidak punya jalur tulis yang dikenali")}
+msg("Mencetak...");const d=bangun();
+for(let p=0;p<d.length;p+=20){const ch=d.slice(p,p+20);if(BC.properties.writeWithoutResponse)await BC.writeValueWithoutResponse(ch);else await BC.writeValue(ch);await new Promise(r=>setTimeout(r,20))}
+msg("Selesai dicetak ✓")
+}catch(e){BC=null;msg("Gagal: "+(e&&e.message?e.message:e))}
+b.disabled=false}
+$("nt-bt").onclick=cetak;
+draw();
+})();
+</script>
+</body></html>
