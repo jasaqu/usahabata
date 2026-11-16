@@ -101,9 +101,9 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <div class="card">
 <label>Jumlah pesanan (biji)</label><input id="h-q" type="number" inputmode="numeric" min="0"value="8000">
 <div class="row"><div><label>Harga jual per biji (Rp)</label><input id="h-j" type="number" inputmode="numeric" min="0"></div>
-<div><label>Harga beli per biji (Rp)</label><input id="h-b" type="number" inputmode="numeric" min="0"></div></div>
+<div><label>Harga beli per biji (Rp)</label><input id="h-b" type="number" inputmode="numeric" min="0" value="415"></div></div>
 <div class="row"><div><label>Ongkir total (Rp)</label><input id="h-o" type="number" inputmode="numeric" min="0"></div>
-<div><label>Ongkos kuli total (Rp)</label><input id="h-k" type="number" inputmode="numeric" min="0"></div></div>
+<div><label>Ongkos kuli total (Rp)</label><input id="h-k" type="number" inputmode="numeric" min="0" value="250000"></div></div>
 </div>
 <div class="card"><div class="sub" style="margin:0">Keuntungan bersih</div><div class="big" id="h-u">Rp 0</div><div class="sub" id="h-m" style="margin:0">Margin 0%</div></div>
 <div class="card" id="h-r"></div>
@@ -187,7 +187,7 @@ $("h-m").textContent="Margin "+r.m.toFixed(1).replace(".",",")+"%";
 const L=[["Total penjualan",r.tj],["Total modal beli",r.tb],["Ongkir",N("h-o")],["Ongkos kuli",N("h-k")],["Total biaya",r.biaya],["Untung per biji",r.pb],["Harga jual minimal (balik modal)",r.min]];
 $("h-r").innerHTML='<table class="sum"><caption>Rincian perhitungan</caption>'+L.map(x=>`<tr><th>${x[0]}</th><td>${rp(x[1])}</td></tr>`).join("")+'</table>'}
 ["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).oninput=hit);
-$("h-x").onclick=()=>{["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).value="8000");hit()};
+$("h-x").onclick=()=>{["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).value="");hit()};
 
 // ongkos
 function ol(){const f=($("o-q").value||"").trim().toLowerCase();const v=areas.map((a,i)=>({a,i})).filter(x=>!f||(x.a.n+" "+x.a.k).toLowerCase().includes(f));$("o-list").innerHTML=v.length?v.map(({a,i})=>`<div class="item"><div><strong>${esc(a.n)}</strong><small>${esc(a.k)}</small></div><div style="text-align:right"><strong>${rp(a.c)}</strong><div style="margin-top:4px"><button class="g s ic" data-e="${i}" aria-label="Ubah" title="Ubah">✏️</button> <button class="g s ic" data-d="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div></div></div>`).join(""):'<div class="msg">'+(areas.length?"Daerah tidak ditemukan.":"Belum ada daerah. Tambah daerah pertama.")+'</div>'}
