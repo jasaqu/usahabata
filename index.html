@@ -100,10 +100,10 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <h1>Kalkulator untung bata</h1><p class="sub">Isi data pesanan, keuntungan bersih langsung terhitung.</p>
 <div class="card">
 <label>Jumlah pesanan (biji)</label><input id="h-q" type="number" inputmode="numeric" min="0"value="8000">
-<div class="row"><div><label>Harga jual per biji (Rp)</label><input id="h-j" type="number" inputmode="numeric" min="0"></div>
-<div><label>Harga beli per biji (Rp)</label><input id="h-b" type="number" inputmode="numeric" min="0" value="400"></div></div>
-<div class="row"><div><label>Ongkir total (Rp)</label><input id="h-o" type="number" inputmode="numeric" min="0" value="850000"></div>
-<div><label>Ongkos kuli total (Rp)</label><input id="h-k" type="number" inputmode="numeric" min="0" value="280000"></div></div>
+<div class="row"><div><label>Harga jual per biji (Rp)</label><input id="h-j" class="rp" type="text" inputmode="numeric" autocomplete="off" placeholder="0"></div>
+<div><label>Harga beli per biji (Rp)</label><input id="h-b" class="rp" type="text" inputmode="numeric" autocomplete="off" placeholder="0" value="400"></div></div>
+<div class="row"><div><label>Ongkir total (Rp)</label><input id="h-o" class="rp" type="text" inputmode="numeric" autocomplete="off" placeholder="0" value="850000"></div>
+<div><label>Ongkos kuli total (Rp)</label><input id="h-k" class="rp" type="text" inputmode="numeric" autocomplete="off" placeholder="0" value="280000"></div></div>
 </div>
 <div class="card"><div class="sub" style="margin:0">Keuntungan bersih</div><div class="big" id="h-u">Rp 0</div><div class="sub" id="h-m" style="margin:0">Margin 0%</div></div>
 <div class="card" id="h-r"></div>
@@ -116,7 +116,7 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <div class="card"><div id="o-list"></div></div>
 <div class="card" id="o-form" hidden><strong id="o-t">Tambah daerah</strong>
 <label>Nama daerah</label><input id="o-n"><label>Kabupaten</label><input id="o-k">
-<label>Ongkos mobil (Rp)</label><input id="o-c" type="number" inputmode="numeric" min="0">
+<label>Ongkos mobil (Rp)</label><input id="o-c" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0">
 <div class="acts"><button class="g" id="o-b">Batal</button><button id="o-s">Simpan</button></div></div>
 <button id="o-a">+ Tambah daerah</button>
 <div id="ie-areas" style="margin-top:14px"></div>
@@ -132,9 +132,9 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <div class="card"><strong id="b-ft">Pesanan baru</strong>
 <div class="row"><div><label>Tanggal</label><input id="b-t" type="date"></div><div><label>Nama pembeli</label><input id="b-n"></div></div>
 <label>Alamat</label><input id="b-a">
-<div class="row"><div><label>Jumlah (biji)</label><input id="b-q" type="number" inputmode="numeric" min="0"></div><div><label>Harga jual (Rp/biji)</label><input id="b-j" type="number" inputmode="numeric" min="0"></div>
-<div><label>Harga beli (Rp/biji)</label><input id="b-b" type="number" inputmode="numeric" min="0"></div><div><label>Ongkos kirim (Rp)</label><input id="b-o" type="number" inputmode="numeric" min="0"></div></div>
-<label>Ongkos kuli (Rp)</label><input id="b-k" type="number" inputmode="numeric" min="0">
+<div class="row"><div><label>Jumlah (biji)</label><input id="b-q" type="number" inputmode="numeric" min="0"></div><div><label>Harga jual (Rp/biji)</label><input id="b-j" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0"></div>
+<div><label>Harga beli (Rp/biji)</label><input id="b-b" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0"></div><div><label>Ongkos kirim (Rp)</label><input id="b-o" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0"></div></div>
+<label>Ongkos kuli (Rp)</label><input id="b-k" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0">
 <div class="kv" style="margin-top:10px"><span>Keuntungan</span><strong id="b-pv">Rp 0</strong></div>
 <div class="acts"><button id="b-s">Simpan pesanan</button><button class="g" id="b-x" hidden>Batal</button></div>
 <div class="msg" id="b-msg"></div></div>
@@ -147,7 +147,7 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <h1>Nota jual beli</h1><p class="sub">Buat nota, kirim ke WhatsApp atau cetak ke printer Bluetooth 58 mm.</p>
 <div class="card"><div class="row"><div><label>Nama pemasok</label><input id="nt-n"></div><div><label>Tanggal</label><input id="nt-t" type="date"></div></div></div>
 <div class="card"><strong>Orderan</strong><div id="nt-i"></div><button class="g" id="nt-ai" style="width:100%;margin-top:10px">+ Tambah item</button></div>
-<div class="card"><strong>Biaya lain</strong><div class="row" style="margin-top:8px"><div><label>Ongkos mobil (Rp)</label><input id="nt-m" type="number" inputmode="numeric" min="0"></div><div><label>Kuli bongkar (Rp)</label><input id="nt-k" type="number" inputmode="numeric" min="0"></div></div><div class="kv" style="margin-top:10px"><span>Total bayar</span><strong id="nt-tb">Rp 0</strong></div></div>
+<div class="card"><strong>Biaya lain</strong><div class="row" style="margin-top:8px"><div><label>Ongkos mobil (Rp)</label><input id="nt-m" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0"></div><div><label>Kuli bongkar (Rp)</label><input id="nt-k" type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0"></div></div><div class="kv" style="margin-top:10px"><span>Total bayar</span><strong id="nt-tb">Rp 0</strong></div></div>
 <div class="card"><strong>Talangan</strong><div id="nt-l"></div><button class="g" id="nt-al" style="width:100%;margin-top:10px">+ Tambah talangan</button><div class="kv" style="margin-top:10px"><span>Total talangan</span><strong id="nt-tt">Rp 0</strong></div></div>
 <div class="card"><div class="sub" style="margin:0">Total yang harus dibayar</div><div class="big" id="nt-r">Rp 0</div></div>
 <div class="acts"><button class="g" id="nt-pv">👁 Preview nota</button></div>
@@ -160,7 +160,9 @@ main{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}html{scroll-pa
 <nav role="tablist"><button role="tab" data-p="hitung" aria-selected="true"><span>💰</span>Harga</button><button role="tab" data-p="ongkos" aria-selected="false"><span>🚚</span>Ongkos</button><button role="tab" data-p="buku" aria-selected="false"><span>📒</span>Pembukuan</button><button role="tab" data-p="kebutuhan" aria-selected="false"><span>📐</span>Kalkulator</button><button role="tab" data-p="nota" aria-selected="false"><span>🧾</span>Nota</button></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const $=id=>document.getElementById(id),N=id=>Number($(id).value)||0;
+const $=id=>document.getElementById(id),N=id=>{const e=$(id),v=e.value;return Number(e.classList.contains("rp")?v.replace(/\D/g,""):v)||0};
+const fmtRp=n=>n?n.toLocaleString("id-ID"):"";
+function rpInput(e){const el=e.target,pos=el.selectionStart,digitsBefore=el.value.slice(0,pos).replace(/\D/g,"").length;const f=fmtRp(Number(el.value.replace(/\D/g,"")));el.value=f;let c=0,np=0;while(np<f.length&&c<digitsBefore){if(/\d/.test(f[np]))c++;np++}try{el.setSelectionRange(np,np)}catch(x){}}
 const rp=n=>(n<0?"-":"")+"Rp "+Math.abs(Math.round(n)).toLocaleString("id-ID");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function ld(k,d){return d}
@@ -186,14 +188,16 @@ $("h-u").textContent=rp(r.u);$("h-u").className="big "+(r.u>0?"pos":r.u<0?"neg":
 $("h-m").textContent="Margin "+r.m.toFixed(1).replace(".",",")+"%";
 const L=[["Total penjualan",r.tj],["Total modal beli",r.tb],["Ongkir",N("h-o")],["Ongkos kuli",N("h-k")],["Total biaya",r.biaya],["Untung per biji",r.pb],["Harga jual minimal (balik modal)",r.min]];
 $("h-r").innerHTML='<table class="sum"><caption>Rincian perhitungan</caption>'+L.map(x=>`<tr><th>${x[0]}</th><td>${rp(x[1])}</td></tr>`).join("")+'</table>'}
-["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).oninput=hit);
+["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).oninput=e=>{if($(i).classList.contains("rp"))rpInput(e);hit()});
+document.querySelectorAll(".rp").forEach(el=>{if(el.value)el.value=fmtRp(Number(el.value.replace(/\D/g,"")))});
 $("h-x").onclick=()=>{["h-q","h-j","h-b","h-o","h-k"].forEach(i=>$(i).value="");hit()};
 
 // ongkos
 function ol(){const f=($("o-q").value||"").trim().toLowerCase();const v=areas.map((a,i)=>({a,i})).filter(x=>!f||(x.a.n+" "+x.a.k).toLowerCase().includes(f));$("o-list").innerHTML=v.length?v.map(({a,i})=>`<div class="item"><div><strong>${esc(a.n)}</strong><small>${esc(a.k)}</small></div><div style="text-align:right"><strong>${rp(a.c)}</strong><div style="margin-top:4px"><button class="g s ic" data-e="${i}" aria-label="Ubah" title="Ubah">✏️</button> <button class="g s ic" data-d="${i}" aria-label="Hapus" title="Hapus">🗑️</button></div></div></div>`).join(""):'<div class="msg">'+(areas.length?"Daerah tidak ditemukan.":"Belum ada daerah. Tambah daerah pertama.")+'</div>'}
 $("o-q").oninput=ol;
+$("o-c").oninput=rpInput;
 $("o-list").onclick=e=>{const t=e.target;if(t.dataset.e!==undefined)of(+t.dataset.e);if(t.dataset.d!==undefined&&confirm("Hapus daerah ini?")){areas.splice(+t.dataset.d,1);sv("ub_areas",areas);ol()}};
-function of(i){editI=i;const a=i>=0?areas[i]:{n:"",k:"",c:""};$("o-t").textContent=i>=0?"Ubah daerah":"Tambah daerah";$("o-n").value=a.n;$("o-k").value=a.k;$("o-c").value=a.c;$("o-form").hidden=false;$("o-a").hidden=true;$("o-n").focus()}
+function of(i){editI=i;const a=i>=0?areas[i]:{n:"",k:"",c:""};$("o-t").textContent=i>=0?"Ubah daerah":"Tambah daerah";$("o-n").value=a.n;$("o-k").value=a.k;$("o-c").value=fmtRp(Number(a.c));$("o-form").hidden=false;$("o-a").hidden=true;$("o-n").focus()}
 $("o-a").onclick=()=>of(-1);
 $("o-b").onclick=()=>{$("o-form").hidden=true;$("o-a").hidden=false};
 $("o-s").onclick=()=>{const a={n:$("o-n").value.trim(),k:$("o-k").value.trim(),c:N("o-c")};if(!a.n){$("o-n").focus();return}
@@ -201,12 +205,12 @@ editI>=0?areas[editI]=a:areas.push(a);sv("ub_areas",areas);ol();$("o-b").onclick
 
 // pembukuan
 function bp(){const r=calc(N("b-q"),N("b-j"),N("b-b"),N("b-o"),N("b-k"));$("b-pv").textContent=rp(r.u);$("b-pv").className=r.u>0?"pos":r.u<0?"neg":""}
-["b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).oninput=bp);
+["b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).oninput=e=>{if($(i).classList.contains("rp"))rpInput(e);bp()});
 const PER=5;
 let editB=-1,pg=0;
 function bx(){editB=-1;["b-n","b-a","b-q","b-j","b-b","b-o","b-k"].forEach(i=>$(i).value="");$("b-ft").textContent="Pesanan baru";$("b-s").textContent="Simpan pesanan";$("b-x").hidden=true;bp()}
 $("b-x").onclick=()=>{bx();$("b-msg").textContent=""};
-function be(i){const o=orders[i];editB=i;$("b-t").value=o.t;$("b-n").value=o.n;$("b-a").value=o.a;$("b-q").value=o.q;$("b-j").value=o.j;$("b-b").value=o.b;$("b-o").value=o.o;$("b-k").value=o.k;$("b-ft").textContent="Ubah pesanan";$("b-s").textContent="Simpan perubahan";$("b-x").hidden=false;bp();$("b-n").scrollIntoView({behavior:"smooth",block:"center"})}
+function be(i){const o=orders[i];editB=i;$("b-t").value=o.t;$("b-n").value=o.n;$("b-a").value=o.a;$("b-q").value=o.q;$("b-j").value=fmtRp(Number(o.j));$("b-b").value=fmtRp(Number(o.b));$("b-o").value=fmtRp(Number(o.o));$("b-k").value=fmtRp(Number(o.k));$("b-ft").textContent="Ubah pesanan";$("b-s").textContent="Simpan perubahan";$("b-x").hidden=false;bp();$("b-n").scrollIntoView({behavior:"smooth",block:"center"})}
 function rr(o){const r=calc(o.q,o.j,o.b,o.o,o.k);return{tot:r.tj,pay:r.biaya,u:r.u}}
 let fD=0,fM="";
 const BLN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
@@ -321,20 +325,20 @@ S.i.forEach((x,i)=>{const v=n(x.q)*n(x.h);s+=v;const e=$("nt-s"+i);if(e)e.textCo
 T.tb=s+n(S.m)+n(S.u);T.tt=S.l.reduce((a,x)=>a+n(x.v),0);T.sisa=T.tb-T.tt;
 $("nt-tb").textContent=R(T.tb);$("nt-tt").textContent=R(T.tt);$("nt-r").textContent=R(T.sisa);save()}
 function draw(){
-$("nt-n").value=S.nama;$("nt-t").value=S.tgl;$("nt-m").value=S.m;$("nt-k").value=S.u;
-$("nt-i").innerHTML=S.i.map((x,i)=>`<div class="card" style="margin:10px 0 0;padding:12px"><label style="margin-top:0">Barang</label><input data-i="${i}" data-f="k" value="${E(x.k)}"><div class="row" style="margin-top:8px"><div><label>Jumlah</label><input type="number" inputmode="numeric" min="0" data-i="${i}" data-f="q" value="${E(x.q)}"></div><div><label>Harga beli (Rp)</label><input type="number" inputmode="numeric" min="0" data-i="${i}" data-f="h" value="${E(x.h)}"></div></div><div class="kv"><span id="nt-s${i}"></span><button class="g s" data-di="${i}">Hapus</button></div></div>`).join("");
-$("nt-l").innerHTML=S.l.map((x,i)=>`<div style="display:grid;grid-template-columns:1.2fr 1fr auto;gap:8px;margin-top:10px;align-items:center"><input placeholder="Keterangan" data-l="${i}" data-f="k" value="${E(x.k)}"><input type="number" inputmode="numeric" min="0" placeholder="Rp 0" data-l="${i}" data-f="v" value="${E(x.v)}"><button class="g s" data-dl="${i}">✕</button></div>`).join("");
+$("nt-n").value=S.nama;$("nt-t").value=S.tgl;$("nt-m").value=fmtRp(n(S.m));$("nt-k").value=fmtRp(n(S.u));
+$("nt-i").innerHTML=S.i.map((x,i)=>`<div class="card" style="margin:10px 0 0;padding:12px"><label style="margin-top:0">Barang</label><input data-i="${i}" data-f="k" value="${E(x.k)}"><div class="row" style="margin-top:8px"><div><label>Jumlah</label><input type="number" inputmode="numeric" min="0" data-i="${i}" data-f="q" value="${E(x.q)}"></div><div><label>Harga beli (Rp)</label><input type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="0" data-i="${i}" data-f="h" value="${E(fmtRp(n(x.h)))}"></div></div><div class="kv"><span id="nt-s${i}"></span><button class="g s" data-di="${i}">Hapus</button></div></div>`).join("");
+$("nt-l").innerHTML=S.l.map((x,i)=>`<div style="display:grid;grid-template-columns:1.2fr 1fr auto;gap:8px;margin-top:10px;align-items:center"><input placeholder="Keterangan" data-l="${i}" data-f="k" value="${E(x.k)}"><input type="text" class="rp" inputmode="numeric" autocomplete="off" placeholder="Rp 0" data-l="${i}" data-f="v" value="${E(fmtRp(n(x.v)))}"><button class="g s" data-dl="${i}">✕</button></div>`).join("");
 calc()}
-$("nt-i").oninput=e=>{const t=e.target;if(t.dataset.i!==undefined){S.i[t.dataset.i][t.dataset.f]=t.value;calc()}};
-$("nt-l").oninput=e=>{const t=e.target;if(t.dataset.l!==undefined){S.l[t.dataset.l][t.dataset.f]=t.value;calc()}};
+$("nt-i").oninput=e=>{const t=e.target;if(t.dataset.i!==undefined){if(t.classList.contains("rp"))rpInput(e);S.i[t.dataset.i][t.dataset.f]=t.classList.contains("rp")?t.value.replace(/\D/g,""):t.value;calc()}};
+$("nt-l").oninput=e=>{const t=e.target;if(t.dataset.l!==undefined){if(t.classList.contains("rp"))rpInput(e);S.l[t.dataset.l][t.dataset.f]=t.classList.contains("rp")?t.value.replace(/\D/g,""):t.value;calc()}};
 $("nt-i").onclick=e=>{const b=e.target.closest("[data-di]");if(!b)return;S.i.splice(+b.dataset.di,1);if(!S.i.length)S.i.push({k:"",q:"",h:""});draw()};
 $("nt-l").onclick=e=>{const b=e.target.closest("[data-dl]");if(!b)return;S.l.splice(+b.dataset.dl,1);draw()};
 $("nt-ai").onclick=()=>{S.i.push({k:"Bata bolong",q:"",h:""});draw()};
 $("nt-al").onclick=()=>{S.l.push({k:"",v:""});draw()};
 $("nt-n").oninput=e=>{S.nama=e.target.value;save()};
 $("nt-t").oninput=e=>{S.tgl=e.target.value;save()};
-$("nt-m").oninput=e=>{S.m=e.target.value;calc()};
-$("nt-k").oninput=e=>{S.u=e.target.value;calc()};
+$("nt-m").oninput=e=>{rpInput(e);S.m=e.target.value.replace(/\D/g,"");calc()};
+$("nt-k").oninput=e=>{rpInput(e);S.u=e.target.value.replace(/\D/g,"");calc()};
 $("nt-rs").onclick=()=>{if(confirm("Hapus isi nota ini dan mulai nota baru?")){S=blank();draw();msg("")}};
 
 /* gambar JPG */
